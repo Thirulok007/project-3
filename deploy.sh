@@ -1,6 +1,7 @@
 #!/bin/bash
 set -e
-IMAGE=$1
-docker pull $IMAGE
-docker rm -f myapp || true
-docker run -d --name myapp -p 80:80 --restart always $IMAGE
+export IMAGE=${1:-thirulok2001/dev}:${2:-latest}
+docker compose -p myapp pull
+docker compose -p myapp up -d
+docker image prune -f
+echo "Deployed $IMAGE"

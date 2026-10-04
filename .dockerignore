@@ -1,5 +1,8 @@
 .git
-node_modules
-*.log
-.env
+.gitignore
 screenshots
+Dockerfile
+docker-compose.yml
+Jenkinsfile
+*.sh
+*.md
