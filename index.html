@@ -1,65 +1,145 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>My CI/CD Pipeline Project</title>
-  <style>
-    * { margin: 0; padding: 0; box-sizing: border-box; }
-    body {
-      min-height: 100vh;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      text-align: center;
-      padding: 2rem;
-      font-family: "Segoe UI", system-ui, -apple-system, sans-serif;
-      background: linear-gradient(135deg, #0b1f26, #2a5568);
-      color: #fff;
-    }
-    h1 { font-size: 2.5rem; margin-bottom: 0.6rem; }
-    .subtitle { color: #cbd5e1; margin-bottom: 2rem; }
-    .tools {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 0.8rem;
-      justify-content: center;
-      margin-bottom: 2rem;
-    }
-    .tool {
-      padding: 0.8rem 1.4rem;
-      border-radius: 10px;
-      background: rgba(255, 255, 255, 0.12);
-      border: 1px solid rgba(255, 255, 255, 0.2);
-      font-weight: 600;
-    }
-    .status {
-      display: inline-block;
-      padding: 0.7rem 1.5rem;
-      border-radius: 999px;
-      background: #22c55e;
-      color: #052e16;
-      font-weight: 700;
-      margin-bottom: 2rem;
-    }
-    footer { color: #cbd5e1; font-size: 0.9rem; }
-  </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Kaapi Kadai - Online Store</title>
+<style>
+:root{--ink:#14213d;--bg:#f6f7f2;--card:#fff;--gold:#f4b400;--leaf:#2f6b4f;--line:#dfe3d8;--muted:#5b6478}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:"Segoe UI",system-ui,sans-serif;background:var(--bg);color:var(--ink);line-height:1.5}
+button{font:inherit;cursor:pointer}
+:focus-visible{outline:3px solid var(--gold);outline-offset:2px}
+header{background:var(--ink);color:#fff;position:sticky;top:0;z-index:5}
+.bar{max-width:1100px;margin:auto;padding:.9rem 1.2rem;display:flex;justify-content:space-between;align-items:center}
+.logo{font-size:1.4rem;font-weight:800;letter-spacing:.3px}
+.logo span{color:var(--gold)}
+.cartbtn{background:var(--gold);color:var(--ink);border:0;border-radius:8px;padding:.5rem 1rem;font-weight:700}
+.hero{max-width:1100px;margin:auto;padding:3rem 1.2rem 1.5rem}
+.hero h1{font-size:clamp(2rem,6vw,3.4rem);line-height:1.1;max-width:15ch}
+.hero p{margin-top:.8rem;color:var(--muted);max-width:48ch}
+.grid{max-width:1100px;margin:auto;padding:1rem 1.2rem 3rem;display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:1.1rem}
+.item{background:var(--card);border:1px solid var(--line);border-radius:12px;overflow:hidden;display:flex;flex-direction:column}
+.pic{height:140px;display:grid;place-items:center;font-size:3.6rem}
+.info{padding:1rem;display:flex;flex-direction:column;gap:.3rem;flex:1}
+.info h3{font-size:1.05rem}
+.info small{color:var(--muted)}
+.row{margin-top:auto;padding-top:.7rem;display:flex;justify-content:space-between;align-items:center}
+.price{font-weight:800;font-size:1.15rem}
+.add{background:var(--leaf);color:#fff;border:0;border-radius:8px;padding:.45rem .9rem;font-weight:600}
+.add:hover{background:#245640}
+#overlay{position:fixed;inset:0;background:rgba(20,33,61,.5);display:none;z-index:9}
+#overlay.open{display:block}
+aside{position:fixed;top:0;right:0;height:100%;width:min(380px,100%);background:#fff;z-index:10;transform:translateX(100%);transition:transform .25s;display:flex;flex-direction:column}
+aside.open{transform:none}
+aside header{background:#fff;color:var(--ink);border-bottom:1px solid var(--line);position:static;padding:1rem 1.2rem;display:flex;justify-content:space-between;align-items:center}
+.close{background:none;border:0;font-size:1.6rem}
+#lines{flex:1;overflow:auto;padding:1rem 1.2rem}
+.line{display:flex;gap:.8rem;align-items:center;padding:.7rem 0;border-bottom:1px solid var(--line)}
+.line .e{font-size:1.8rem}
+.line .n{flex:1;font-size:.95rem}
+.qty{display:flex;align-items:center;gap:.4rem}
+.qty button{width:28px;height:28px;border:1px solid var(--line);background:#fff;border-radius:6px}
+.empty{color:var(--muted);padding:2rem 0;text-align:center}
+.foot{padding:1rem 1.2rem;border-top:1px solid var(--line)}
+.total{display:flex;justify-content:space-between;font-weight:800;font-size:1.2rem;margin-bottom:.8rem}
+.checkout{width:100%;background:var(--ink);color:#fff;border:0;border-radius:8px;padding:.8rem;font-weight:700}
+.checkout:disabled{opacity:.4;cursor:not-allowed}
+#msg{margin-top:.7rem;color:var(--leaf);font-weight:600;min-height:1.3rem}
+footer{text-align:center;color:var(--muted);padding:1.5rem 1rem 2.5rem;border-top:1px solid var(--line);font-size:.9rem}
+@media (prefers-reduced-motion:reduce){aside{transition:none}}
+</style>
 </head>
 <body>
-  <h1>🚀 My CI/CD Pipeline Project</h1>
-  <p class="subtitle">Automated build, push and deploy with Docker, Jenkins and AWS</p>
+<header><div class="bar">
+  <div class="logo">Kaapi<span>Kadai</span></div>
+  <button class="cartbtn" id="open">Cart (<span id="count">0</span>)</button>
+</div></header>
 
-  <div class="tools">
-    <div class="tool">GitHub</div>
-    <div class="tool">Jenkins</div>
-    <div class="tool">Docker Hub</div>
-    <div class="tool">AWS EC2</div>
-    <div class="tool">Monitoring</div>
+<section class="hero">
+  <h1>Pantry staples, delivered fresh.</h1>
+  <p>Filter coffee, tea, spices and snacks from small farms and family units. Pick what you need and check out in a minute.</p>
+</section>
+
+<main class="grid" id="grid"></main>
+
+<div id="overlay"></div>
+<aside id="cart" aria-label="Shopping cart">
+  <header><strong>Your cart</strong><button class="close" id="close" aria-label="Close cart">&times;</button></header>
+  <div id="lines"></div>
+  <div class="foot">
+    <div class="total"><span>Total</span><span id="total">₹0</span></div>
+    <button class="checkout" id="checkout">Place order</button>
+    <div id="msg" role="status"></div>
   </div>
+</aside>
 
-  <div class="status">● Application is running</div>
+<footer>Built by Thirulok | GUVI x HCL DevOps Project</footer>
 
-  <footer>Built by Thirulok | GUVI x HCL DevOps Project</footer>
+<script>
+const PRODUCTS=[
+ {id:1,n:"Filter coffee powder",w:"250 g",p:220,e:"☕",c:"#f3dcc2"},
+ {id:2,n:"Assam tea leaves",w:"250 g",p:180,e:"🍵",c:"#d9ead3"},
+ {id:3,n:"Organic jaggery",w:"500 g",p:90,e:"🟤",c:"#f1e2b8"},
+ {id:4,n:"Cold-pressed coconut oil",w:"500 ml",p:260,e:"🥥",c:"#e6eef5"},
+ {id:5,n:"Millet cookies",w:"200 g",p:120,e:"🍪",c:"#f6e0c8"},
+ {id:6,n:"Mango pickle",w:"300 g",p:140,e:"🥭",c:"#fbe3a5"},
+ {id:7,n:"Green cardamom",w:"50 g",p:150,e:"🌿",c:"#d5e8d4"},
+ {id:8,n:"Banana chips",w:"250 g",p:110,e:"🍌",c:"#fdf0b0"}
+];
+const $=id=>document.getElementById(id);
+const rupee=n=>"₹"+n.toLocaleString("en-IN");
+let cart={};
+try{cart=JSON.parse(localStorage.getItem("kk-cart")||"{}")}catch(e){}
+function save(){try{localStorage.setItem("kk-cart",JSON.stringify(cart))}catch(e){}}
+
+$("grid").innerHTML=PRODUCTS.map(p=>`
+ <article class="item">
+  <div class="pic" style="background:${p.c}">${p.e}</div>
+  <div class="info"><h3>${p.n}</h3><small>${p.w}</small>
+   <div class="row"><span class="price">${rupee(p.p)}</span>
+   <button class="add" data-id="${p.id}">Add to cart</button></div></div>
+ </article>`).join("");
+
+function render(){
+  const ids=Object.keys(cart);
+  let total=0,count=0;
+  $("lines").innerHTML=ids.length?ids.map(id=>{
+    const p=PRODUCTS.find(x=>x.id==id),q=cart[id];
+    total+=p.p*q;count+=q;
+    return `<div class="line"><span class="e">${p.e}</span>
+     <span class="n">${p.n}<br><small>${rupee(p.p)} each</small></span>
+     <span class="qty"><button data-dec="${id}" aria-label="Remove one">-</button>${q}<button data-inc="${id}" aria-label="Add one">+</button></span></div>`;
+  }).join(""):'<p class="empty">Your cart is empty. Add something from the store.</p>';
+  $("total").textContent=rupee(total);
+  $("count").textContent=count;
+  $("checkout").disabled=!ids.length;
+  save();
+}
+function change(id,d){
+  cart[id]=(cart[id]||0)+d;
+  if(cart[id]<=0)delete cart[id];
+  render();
+}
+function toggle(open){
+  $("cart").classList.toggle("open",open);
+  $("overlay").classList.toggle("open",open);
+}
+document.addEventListener("click",e=>{
+  const t=e.target;
+  if(t.dataset.id){change(t.dataset.id,1);$("msg").textContent=""}
+  if(t.dataset.inc)change(t.dataset.inc,1);
+  if(t.dataset.dec)change(t.dataset.dec,-1);
+});
+$("open").onclick=()=>toggle(true);
+$("close").onclick=()=>toggle(false);
+$("overlay").onclick=()=>toggle(false);
+document.addEventListener("keydown",e=>{if(e.key==="Escape")toggle(false)});
+$("checkout").onclick=()=>{
+  cart={};render();
+  $("msg").textContent="Order placed. Thank you for shopping with us!";
+};
+render();
+</script>
 </body>
 </html>
